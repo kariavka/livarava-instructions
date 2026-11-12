@@ -24,3 +24,12 @@ The current instruction set version is stored in [VERSION](./VERSION).
 Release history is recorded in [CHANGELOG.md](./CHANGELOG.md).
 Follow [versioning.instructions.md](./versioning.instructions.md) when preparing
 releases. Release commits are tagged as `v<version>` (starting with `v1.0.0`).
+
+## Git shortcuts
+
+- `make refresh` pulls updates for `develop`, then `master`.
+- `make release` pushes `develop`, then `master`.
+
+Both commands finish on `master` and require the corresponding branches and
+upstreams to be configured. `make release` does not create or push release tags;
+create the annotated version tag after the release commit and push it separately.
