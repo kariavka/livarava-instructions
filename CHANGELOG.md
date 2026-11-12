@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 — 2026-11-12
+
+- Added `make release` and `make refresh` shortcuts for pushing and pulling the `develop` and `master` branches.
+- Documented branch prerequisites, the final branch, and separate handling of release tags.
+
 ## 1.0.0 — 2026-11-12
 
 First release of the shared LivaRava instruction set.
