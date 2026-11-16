@@ -12,8 +12,17 @@ server side.
 The backend JSON:API contract served by the `livarava` monolith under
 `/api/v2/` lives elsewhere: resource type, attribute and error-code casing is
 in `conventions.instructions.md` (section 4), and the per-surface contracts
-are checked into the repository next to the code they describe
-(`livarava/apis/api_v2/BRIDGE.md`, `livarava/apis/api_v2/CALENDAR.md`).
+are checked into `docs/api/` of the `livarava` repository, indexed by
+`docs/api/README.md`: `paging.md`, `bridge.md`, `calendar.md`, `chat.md`.
+Read the one that covers the surface before changing a client against it.
+
+Pagination is one contract for every listing, whichever store serves it, and
+`paging.md` is it. A client pages with `page[offset]`+`page[limit]`,
+`page[number]`+`page[size]` or the legacy `page`+`per_page`, and reads
+`meta.total_results`, `meta.total_pages` and the `first`/`prev`/`next`/`last`
+links. Do not invent a fourth form in a client, and do not assume an
+endpoint ignores a parameter it does not know: the PostgreSQL listings
+answer `400 unknown-query-parameter`.
 
 When a client here disagrees with the server contract, the server contract
 wins and the client is corrected.

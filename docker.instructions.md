@@ -24,3 +24,46 @@ applyTo: "**/Dockerfile, **/Dockerfile.*, **/docker-compose*.yml, **/compose*.ym
 - Do not leave a dead top-level `volumes: node_modules:` declaration when the service uses an anonymous volume (`- /app/node_modules`). Either drop the declaration or reference it properly as `node_modules:/app/node_modules`. Most LivaRava projects currently carry the unused declaration.
 - Do not add `CHOKIDAR_USEPOLLING`. It is a webpack-era setting that Turbopack does not read, so it only looks like file watching is configured. If hot reload is broken, the cause is almost always a missing `allowedDevOrigins` (see the Next.js instructions), not file watching.
 - `:cached` on a bind mount is a macOS/osxfs option and a no-op on the Linux dev host. Harmless, but do not add it to anything new.
+
+## Disk efficiency and build performance
+
+### Image size optimization
+
+- When a development image grows unexpectedly, inspect image layers first (`docker history`, `docker image inspect`) and remove the biggest avoidable layer inputs.
+- Keep generated artifacts and local caches out of images via `.dockerignore` and Dockerfile copy scope; include only files needed for the dev runtime.
+- Use multi-stage builds only when measurements show a real benefit for the target project (smaller image and/or faster rebuilds) without harming hot reload.
+- Do not force production-only hardening patterns into development containers when they slow iterative workflows.
+
+### Build cache management
+
+- Order layers to maximize cache reuse: base tools -> dependency manifests/lockfiles -> dependency install -> app source.
+- Avoid dependency reinstalls unless dependency manifests changed; source-only edits should reuse dependency layers.
+- Distinguish storage classes during analysis: images, build cache, writable container layers, and volumes are tracked separately.
+- Treat Docker storage totals carefully: shared layers can make per-object sizes appear additive even when bytes are reused.
+- Keep the existing automated cache cleanup and disk monitoring flow intact; do not replace it with manual recurring cleanup steps.
+
+### Volume management
+
+- Prefer named volumes when data is expected to survive rebuild cycles and be managed explicitly (for example long-lived `node_modules`/build caches in stable local setups).
+- Use anonymous volumes only for short-lived or intentionally disposable data.
+- Before recommending any volume cleanup, inspect which containers reference each volume and identify likely stale entries.
+- Never remove volumes automatically when they may contain valuable data.
+- After dependency updates, ensure dependency volumes are refreshed (`--renew-anon-volumes` for anonymous volumes, or recreate the relevant named volume) so runtime dependencies match rebuilt images.
+
+### Development server safety
+
+- Never stop, restart, or remove active development containers without explicit approval.
+- Never run destructive Docker cleanup commands automatically (`prune`, forced volume removal, image mass deletion).
+- Inspect concrete targets (container/image/volume) before proposing deletion and describe expected impact.
+- Keep Docker as the reference runtime; do not require direct host Node.js installation for standard dev/build/test workflows.
+
+### Optimization workflow
+
+When modifying a project Docker setup:
+
+1. Inspect Dockerfile, compose files, `.dockerignore`, and package manifests.
+2. Identify measurable inefficiencies (size, rebuild time, dependency reuse, startup cost).
+3. Propose and apply the smallest safe change set.
+4. Preserve project-specific behavior (ports, commands, mounts, hot reload flow).
+5. Verify startup, dependency correctness, hot reload, and persistent data behavior.
+6. Compare build time and disk consumption before and after.
