@@ -30,16 +30,39 @@ Commands:
 
 Decide the family first, because everything else follows from it.
 
-| Family | Base class | What it proves | Needs a server |
+| Family | Base class | What it proves | Touches |
 |---|---|---|---|
-| API suite | `TestAbstractAPI` | an endpoint's behaviour and its access rules, over HTTP | yes |
-| Offline suite | `unittest.TestCase` | a function, a rule or a parser, in process | no |
+| API suite | `TestAbstractAPI` | an endpoint's behaviour and its access rules, over HTTP | the API server |
+| Offline suite | `unittest.TestCase` | a function, a rule or a parser, in process | nothing |
+| Storage suite | `unittest.TestCase` | a property that belongs to the database rather than to the code | PostgreSQL or Neo4j |
 
 An access rule belongs in an API suite: the rule is only worth what the
 endpoint actually answers, and a direct call to `Security.can` proves the
 branch, not the response. A value validator, a query builder or a mapper
 belongs in an offline suite, where it runs in milliseconds and needs no
 fixtures.
+
+A storage suite is the exception, not the fallback. Use it only where the
+behaviour under test is the storage's own — that a unique constraint rejects
+the second row, that an advisory lock refuses a second holder, that a
+statement the builder produced is one the server accepts. A stub cannot prove
+any of those, because the thing being tested is the server's answer. Anything
+the code decides by itself belongs in an offline suite, where it costs
+milliseconds and no cleanup.
+
+A storage suite carries two obligations the others do not:
+
+- **Name what it creates uniquely per run**, with `uuid.uuid4().hex` or the
+  equivalent, so that two runs, or two suites running together, never meet on
+  the same row or the same key.
+- **Remove what it created**, in `tearDown` or `tearDownClass`, whether the
+  test passed or failed. These suites run against the same database the
+  platform uses, so a row left behind is production data, and 183 user
+  fixtures once stayed in the graph because this was left to each suite to
+  remember.
+
+It asserts on nothing it did not create: never on a count of rows, never on
+the first row of a table, never on what another suite left.
 
 Do not mix the families in one file.
 
@@ -149,27 +172,76 @@ mark its parts:
   `security.py`.
 - Requests go through `get_api_url`, `get_headers` and `requests`. Do not build
   a URL or a header by hand.
-- Request bodies come from `livarava.mocks.<resource>.v2_valid_data`. A suite
-  that needs a payload the mock does not produce extends the mock.
+- Request bodies come from the resource's mock, never from a dict written in
+  the test. Section 4 states what a mock looks like.
 - Assert the status first, always with `assertStatus`, and only then read the
   body. A test that reads `response.json()` before asserting the status reports
   a `KeyError` instead of the status it actually got.
 
-## 4) Offline suites
+## 4) Request payloads
 
-One file per subject, `tests/test_<subject>.py`. One class per unit of
-behaviour, named `<Subject>Test` — not `TestCase`, not `Test<Subject>`. A file
-may hold several such classes, and the stubs they share are module-level
-classes named `Stub<Thing>` or `Fake<Thing>`.
+A request body comes from a mock, never from a dict built inside the test.
+The mock is the one place that knows the shape of the resource, so a member
+that changes is corrected once rather than in every suite that sends it.
 
-Method names are sentences about the behaviour, lowercase, with no grammar to
-parse:
+- One module per resource, `livarava/mocks/<resource>.py`, with the module
+  header `docstring.instructions.md` requires.
+- The builder is `v2_valid_data(**kwargs)` and returns a whole JSON:API
+  document: `data` carrying `attributes`, `relationships` and the model's own
+  `JSON_TYPE`. Older modules use names like `get_<resource>_valid_data`; they
+  are legacy, not a pattern to follow.
+- Values that must not collide between runs are generated in the builder, with
+  `uuid.uuid1()`, not passed in by the caller.
+- `item_id` adds `data.id`, which a PATCH needs and a POST must not carry.
+- A relationship is offered as `<name>_id` and expands to
+  `{"data": {"id": ..., "type": "<json type>"}}`. Offer every relationship an
+  access rule reads: a rule decided by the project is untestable while the
+  mock cannot send one.
+- Keep the builder valid. A suite that needs an invalid document takes the
+  valid one and breaks the one member under test, in the test, so that the
+  reader sees what makes it invalid. An invalid shape that several suites need
+  earns its own `v2_invalid_<reason>_data` beside it.
+
+Adding a resource to the suites means adding its mock in the same change.
+
+## 5) Offline suites
+
+One file per subject, named for the module under test: take the path
+segments that distinguish it, drop `livarava`, and join them with
+underscores. `livarava/pg/model.py` is `tests/test_pg_model.py`,
+`livarava/ai/chat/context.py` is `tests/test_chat_context.py`. Do not run
+words together to shorten the name.
+
+One class per unit of behaviour, named `Test<Subject>`, as every class in
+these suites is: `TestPgModelParse`, `TestPgModelSerialize`. The prefix is
+the convention across both families, so `TestPostAPI` and `TestPgModelParse`
+read alike and a suite sorts with its siblings. Not `<Subject>Test`, not
+`<Subject>TestCase`. Its docstring is one sentence stating the rule the class
+holds, ending with a full stop. The test methods carry no docstring: the name is the
+statement, and a method that needs a sentence of its own is named wrongly or
+tests two things.
+
+A file may hold several such classes, and the stubs they share are
+module-level classes named `Stub<Thing>` or `Fake<Thing>`.
+
+Method names say exactly what the method tests, in as few words as carry it.
+They are descriptions, not prose: drop the articles and the connectives, keep
+the subject and the outcome, and let the words run in the order
+`test_<subject>_<condition>_<outcome>`.
 
 ```python
-test_an_item_keeps_its_position
-test_a_numeric_id_becomes_a_string
-test_context_must_be_an_array
+test_unknown_attribute_refused
+test_default_applied_on_create
+test_numeric_string_becomes_int
 ```
+
+Not `test_an_unknown_attribute_is_refused`, which reads as a sentence, and not
+`test_parse_works` or `test_case_3`, which say nothing. A method that cannot
+be named this way tests two things.
+
+A method carries a docstring only where it has something the name cannot hold,
+such as the audit finding a test closes. A docstring that restates the name is
+noise.
 
 An offline suite touches no network, no graph and no Redis. A dependency it
 cannot avoid is replaced by a stub defined in the file.

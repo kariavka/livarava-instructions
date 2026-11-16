@@ -289,7 +289,7 @@ existing one rather than defining a second identifier for the same job.
 ## Request resource context
 
 A user message may carry the resources the user is working with, as JSON:API
-resource identifiers. The contract is `livarava/apis/api_v2/CHAT.md`, and the
+resource identifiers. The contract is `docs/api/chat.md`, and the
 backend side of it is the `Context` class in `livarava/ai/chat/context.py`,
 which a route builds with `Context.build(value, user, workflow)` and hands to
 `Chat.get_response`. The rules that bind a client:
