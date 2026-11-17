@@ -1,6 +1,8 @@
 ---
 name: LivaRava Commit Rules
-description: "Use when writing a git commit message for any LivaRava project. Defines the type indicator, the summary paragraph, the detailed change list and the version bump."
+description: "Use when writing or generating a git commit message for any LivaRava project."
+argument-hint: "Describe staged changes briefly"
+agent: "agent"
 applyTo: "**"
 ---
 # Commit Messages
@@ -8,6 +10,12 @@ applyTo: "**"
 Every commit message starts with a type indicator, then one short paragraph
 describing the main changes, and then a detailed list when there were many of
 them. Write in English and in the past tense, describing what the commit did.
+For automated commit-message generation, return only the commit message text,
+with no markdown fences and no extra commentary.
+
+When answering in chat and the user asks for a commit message, put the message
+into one plain-text copy box and provide no assistant labels or commentary
+outside that box.
 
 `applyTo` is `**` because a commit message is not a file. This is the one
 instruction file that governs an action rather than a path, so it applies to
@@ -18,13 +26,13 @@ every project in the repository set.
 - Always use this standard when writing or generating commit messages, including
   the Generate Commit Message action in VS Code Source Control.
 - Configure `github.copilot.chat.commitMessageGeneration.instructions` with
-  `{ "file": "/home/smart/livarava-instructions/commit.instructions.md" }` in the array.
+  `{ "file": "/home/smart/livarava-instructions/commit.md" }` in the array.
   Keep this entry in the shared remote user settings at
   `/home/smart/.vscode-server/data/User/settings.json` and in each LivaRava
   project's `.vscode/settings.json`. Preserve other instruction entries.
-- `chat.instructionsFilesLocations` and the `commit-message.prompt.md` prompt
-  alone do not configure the Source Control generator; its dedicated setting
-  must explicitly reference this canonical file.
+- `chat.instructionsFilesLocations` alone does not configure the Source Control
+  generator; its dedicated setting must explicitly reference this canonical
+  file.
 - When creating or configuring a LivaRava project, verify that its workspace
   settings do not override the shared commit instructions without this entry.
 - Keep the rules here as the single source of truth; do not copy them into

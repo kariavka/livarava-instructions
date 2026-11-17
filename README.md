@@ -2,11 +2,11 @@
 
 Canonical location: `/home/smart/livarava-instructions/`.
 
-- Topic rules are stored in `*.instructions.md`; preserve their front matter.
+- Topic rules are stored in `*.md`; preserve their front matter.
 - VS Code loads this directory through `chat.instructionsFilesLocations` in
   `/home/smart/.vscode-server/data/User/settings.json`.
 - VS Code Source Control commit-message generation explicitly loads
-  `commit.instructions.md` through
+  `commit.md` through
   `github.copilot.chat.commitMessageGeneration.instructions` in the shared
   remote user settings and project workspace settings.
 - `/home/smart/.vscode-server/data/User/prompts` is a compatibility symlink here.
@@ -22,7 +22,7 @@ configuration directories. Keep topic guidance in its matching instruction file.
 
 The current instruction set version is stored in [VERSION](./VERSION).
 Release history is recorded in [CHANGELOG.md](./CHANGELOG.md).
-Follow [versioning.instructions.md](./versioning.instructions.md) when preparing
+Follow [versioning.md](./versioning.md) when preparing
 releases. Release commits are tagged as `v<version>` (starting with `v1.0.0`).
 
 ## Git shortcuts

@@ -7,14 +7,14 @@ applyTo: "**/*.{js,jsx,ts,tsx}"
 # LivaRava Privacy Rules
 
 This is the top of a three-file system. Privacy defines **what** may be
-processed and on what basis; `consent.instructions.md` manages **permission**
-for the optional part; `cookie.instructions.md` enforces **browser storage**.
+processed and on what basis; `consent.md` manages **permission**
+for the optional part; `cookie.md` enforces **browser storage**.
 
 | File | Owns | Never owns |
 |---|---|---|
-| `privacy.instructions.md` | Purposes, legal bases, disclosure, retention, third-party review | Permission state, storage mechanics |
-| `consent.instructions.md` | The `Consent` component: categories, decisions, withdrawal, consent-aware activation | Which processing is lawful, cookie attributes |
-| `cookie.instructions.md` | The `Cookie` component: classification, attributes, expiry, deletion | Whether a purpose exists, consent UI |
+| `privacy.md` | Purposes, legal bases, disclosure, retention, third-party review | Permission state, storage mechanics |
+| `consent.md` | The `Consent` component: categories, decisions, withdrawal, consent-aware activation | Which processing is lawful, cookie attributes |
+| `cookie.md` | The `Cookie` component: classification, attributes, expiry, deletion | Whether a purpose exists, consent UI |
 
 Each file states a rule once. When a rule belongs to another file, reference it
 rather than restating it.
@@ -45,7 +45,7 @@ One visitor on that host has one privacy and consent state across all of them.
 `id.livarava.com` and `accounts.livarava.com` are a **different host**. They are
 in scope for these privacy rules and out of scope for a host-scoped
 `www.livarava.com` cookie; see the domain section of
-`cookie.instructions.md` before assuming a shared decision.
+`cookie.md` before assuming a shared decision.
 
 ## 3) Legal framework
 
@@ -89,15 +89,15 @@ Align every processing purpose with the basis the policy names (policy § 9):
 - Session recording and heatmap tools receive whole pages. Where such a tool is
   enabled, exclude form fields, authenticated views and any element rendering
   user content from capture; masking is not optional.
-- Browser storage of personal data is governed by `cookie.instructions.md`.
-  Nothing beyond what `auth.instructions.md` requires may be kept there.
+- Browser storage of personal data is governed by `cookie.md`.
+  Nothing beyond what `auth.md` requires may be kept there.
 
 ## 6) Transparency
 
 A processing purpose exists for the visitor only if it is disclosed.
 
 - A new third-party service, cookie, or device-storage key ships only once it
-  is in the cookie registry (`cookie.instructions.md`) **and** in the published
+  is in the cookie registry (`cookie.md`) **and** in the published
   policy.
 - The visitor must be able to reach, from every page: the Privacy Policy, the
   cookie declaration, and the consent preferences. The first two are CMS pages;
@@ -122,9 +122,9 @@ Before adding or re-enabling any third-party script, embed, font, pixel or
 iframe, answer all of these in the change itself:
 
 1. Which purpose does it serve, and which legal basis?
-2. Which consent category gates it (`consent.instructions.md`)?
+2. Which consent category gates it (`consent.md`)?
 3. What does it store on the device, under which names and for how long
-   (`cookie.instructions.md`)?
+   (`cookie.md`)?
 4. What personal data does it receive, and where is it processed?
 5. Is it disclosed in the published policy and the cookie declaration?
 6. Does it have a vendor-specific consent signal that must be sent

@@ -1,7 +1,7 @@
 # Global instructions
 
 Shared instruction files live in `/home/smart/livarava-instructions/`. Read the relevant
-`*.instructions.md` files for the work being performed; each file declares its
+`*.md` files for the work being performed; each file declares its
 scope in its front matter. Update the canonical files here.
 
 # Assistant message formatting

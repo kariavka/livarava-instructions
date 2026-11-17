@@ -5,7 +5,7 @@ applyTo: "**/package.json, **/yarn.lock, **/package-lock.json, **/pnpm-lock.yaml
 ---
 # Frontend Package Updates
 
-Related instructions: `next.instructions.md` for `next.config.js`, module aliases and dev origins; `ports.instructions.md` for ports, `basePath` and local hosts; `docker.instructions.md` and `makefile.instructions.md` for running the tooling, since Node is not installed on the dev host.
+Related instructions: `next.md` for `next.config.js`, module aliases and dev origins; `ports.md` for ports, `basePath` and local hosts; `docker.md` and `makefile.md` for running the tooling, since Node is not installed on the dev host.
 
 - If dependencies in `package.json` can be safely updated to the latest versions, do it. Do not leave them outdated by default.
 - Use the project's own package manager (detect it from the lockfile: `yarn.lock` → yarn, `package-lock.json` → npm, `pnpm-lock.yaml` → pnpm). Never mix managers and always keep the lockfile in sync with `package.json`.

@@ -10,8 +10,8 @@ files carry the rest, and the suite's language decides which one applies:
 
 | File | Owns |
 |---|---|
-| `tests-backend.instructions.md` | Python suites, `tests/test_*.py` |
-| `tests-frontend.instructions.md` | ESM suites, `tests/<Name>.test.mjs` |
+| `tests-backend.md` | Python suites, `tests/test_*.py` |
+| `tests-frontend.md` | ESM suites, `tests/<Name>.test.mjs` |
 
 Read this file and the one for the language. Where they disagree, the
 language file wins, because it is the more specific of the two.

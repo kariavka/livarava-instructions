@@ -7,8 +7,8 @@ applyTo: "**/lib/Consent.js, **/components/consent/**, **/styles/consent.scss, *
 # LivaRava Consent Rules
 
 Consent manages **permission** for the optional processing that
-`privacy.instructions.md` defines, and hands storage to the `Cookie` component
-of `cookie.instructions.md`. It decides; `Cookie` persists and cleans up.
+`privacy.md` defines, and hands storage to the `Cookie` component
+of `cookie.md`. It decides; `Cookie` persists and cleans up.
 
 LivaRava operates **its own first-party consent implementation**. Do not add an
 external CMP service, SDK, hosted banner or consent library, and do not restore
@@ -83,7 +83,7 @@ Exactly four, in this order, with these keys:
   `necessary` cookie. Nothing else writes or parses it.
 - It holds no identifier: no user id, no IP, no fingerprint, no page URL.
 - Ask again when `VERSION` was raised, when the record is older than the
-  consent lifetime in `cookie.instructions.md`, or when the set of purposes
+  consent lifetime in `cookie.md`, or when the set of purposes
   changed. A category added later starts denied for everyone who already
   decided, whatever their previous answer was.
 - The cookie is the browser's copy of the decision, not proof of it. A
@@ -124,7 +124,7 @@ require their own signal as well.
 - **Microsoft Clarity:** the tag records sessions, so it is not loaded at all
   before `statistics`, and its own consent call is sent on grant.
 - Any further vendor: see question 6 of section 8 in
-  `privacy.instructions.md`.
+  `privacy.md`.
 
 ### Google advertising and certification
 
@@ -218,7 +218,7 @@ decide what to serve them.
   category names its purpose in plain language with its retention.
 - WCAG 2.1 AA contrast, touch targets of at least 44px, usable at 320px width,
   and no layout shift when the banner appears.
-- Styling follows `style.instructions.md`: Bootstrap plus a single owned
+- Styling follows `style.md`: Bootstrap plus a single owned
   stylesheet (`styles/consent.scss`), imported once from the app entry point.
   No `styled-components`, no inline style blocks, no `!important`.
 - Hydration: the banner renders nothing on the server and mounts after the
