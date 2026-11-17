@@ -5,7 +5,7 @@ applyTo: "**/tests/*.test.mjs, **/components/**/*.js, **/lib/**/*.js"
 ---
 # Frontend test suites
 
-Read `tests.instructions.md` first; it carries the rules that hold in every
+Read `tests.md` first; it carries the rules that hold in every
 language, including the test-first workflow and what has to be covered. This
 file adds what is specific to the ESM suites of the frontends.
 
