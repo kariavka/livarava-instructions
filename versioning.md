@@ -28,6 +28,6 @@ of projects that consume its instructions.
 - Record each release under its version and release date (`YYYY-MM-DD`), newest first.
 - Describe meaningful changes and any required migration steps in concise bullets.
 - Keep pending changes under `Unreleased` when needed; move them into the dated release entry when releasing.
-- Follow `commit.instructions.md` for the commit message. End its summary paragraph with `Bumped version to <version>.` only when the commit actually changes `VERSION`, including its initial addition.
+- Follow `commit.md` for the commit message. End its summary paragraph with `Bumped version to <version>.` only when the commit actually changes `VERSION`, including its initial addition.
 - After committing the release, create an annotated Git tag named `v<version>` on that release commit (for example, `v1.0.0`).
 - Verify that the tag, `VERSION`, and changelog release entry agree. Never move an existing release tag to different content.

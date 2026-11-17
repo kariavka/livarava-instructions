@@ -5,7 +5,7 @@ applyTo: "**/tests/test_*.py"
 ---
 # Python test suites
 
-Read `tests.instructions.md` first; it carries the rules that hold in every
+Read `tests.md` first; it carries the rules that hold in every
 language, including the test-first workflow and what has to be covered. This
 file adds what is specific to Python suites, `tests/test_*.py`.
 
@@ -68,7 +68,7 @@ Do not mix the families in one file.
 
 ## 2) Module header
 
-Follow `docstring.instructions.md`. The dotted path is the test module's own
+Follow `docstring.md`. The dotted path is the test module's own
 (`tests.test_project`), and the title is `LivaRava Test <Subject>`, repeated in
 `__title__`. The description says what the suite exercises, not what the
 subject does.
@@ -185,7 +185,7 @@ The mock is the one place that knows the shape of the resource, so a member
 that changes is corrected once rather than in every suite that sends it.
 
 - One module per resource, `livarava/mocks/<resource>.py`, with the module
-  header `docstring.instructions.md` requires.
+  header `docstring.md` requires.
 - The builder is `v2_valid_data(**kwargs)` and returns a whole JSON:API
   document: `data` carrying `attributes`, `relationships` and the model's own
   `JSON_TYPE`. Older modules use names like `get_<resource>_valid_data`; they

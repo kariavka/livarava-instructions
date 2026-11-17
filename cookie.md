@@ -7,9 +7,9 @@ applyTo: "**/lib/Cookie.js, **/lib/Storage.js, **/lib/Consent.js, **/components/
 # LivaRava Cookie Rules
 
 Cookie enforces **browser storage**. It asks `Consent`
-(`consent.instructions.md`) whether an optional category is granted and refuses
+(`consent.md`) whether an optional category is granted and refuses
 the write when it is not; which purposes exist at all is decided by
-`privacy.instructions.md`.
+`privacy.md`.
 
 Cookie never shows UI, never decides lawfulness, and never asks the visitor
 anything.
@@ -44,7 +44,7 @@ Cookie.purge(category)          // delete everything belonging to a category
 cookie declaration. A cookie that is not in the registry is not set.
 
 Each entry records: name, category (the four keys from
-`consent.instructions.md`), purpose in plain language, maximum age, and who
+`consent.md`), purpose in plain language, maximum age, and who
 sets it (LivaRava, or the third party).
 
 - Classify by what the cookie **does**, not by who benefits. A cookie that
@@ -122,7 +122,7 @@ all store information on the device, so TDDDG § 25 treats them exactly like
 cookies. The same classification, consent gate and cleanup apply.
 
 - Authentication storage (`localStorage.session` and the `me` cache described
-  in `auth.instructions.md`) is `necessary`: it exists to deliver a service the
+  in `auth.md`) is `necessary`: it exists to deliver a service the
   visitor asked for.
 - Anything else in `localStorage` needs a registry entry and a category, under
   the same `lr_` naming.

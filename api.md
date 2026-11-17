@@ -11,7 +11,7 @@ server side.
 
 The backend JSON:API contract served by the `livarava` monolith under
 `/api/v2/` lives elsewhere: resource type, attribute and error-code casing is
-in `conventions.instructions.md` (section 4), and the per-surface contracts
+in `conventions.md` (section 4), and the per-surface contracts
 are checked into `docs/api/` of the `livarava` repository, indexed by
 `docs/api/README.md`: `paging.md`, `bridge.md`, `calendar.md`, `chat.md`.
 Read the one that covers the surface before changing a client against it.
